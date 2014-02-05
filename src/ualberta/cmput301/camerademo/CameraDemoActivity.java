@@ -1,9 +1,12 @@
 package ualberta.cmput301.camerademo;
 
 import ualberta.cmput301.camerodemo.R;
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Activity;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,10 +44,24 @@ public class CameraDemoActivity extends Activity {
 	// need implement onAcitityResult() method.
 	public void takeAPhoto() {
 		// To Do		
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		Intent.putExtra(MediaStore.EXTRA_OUTPUT,imageFileUri);
+		startActivityForResult(intent,0);
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// To Do
+		if (data != null){
+			if(resultCode == RESULT_OK){
+				Bitmap bm = data.getExtras().getParcelable("data");
+				imageButton.setImageBitmap(bm);
+				textView.setText("PHOTO OK");
+			} else if (resultCode == RESULT_CANCELED){
+				textView.setText("PHOTO CANCELED");
+			} else{
+				textView.setText("UNKNOWN ERROR");
+			}
+		}
 	}	
 	
 	@Override
